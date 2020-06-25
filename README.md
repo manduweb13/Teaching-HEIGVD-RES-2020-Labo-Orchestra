@@ -144,8 +144,7 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 |Question | How do we **define and build our own Docker image**?|
 | | By creating a Dockerfile  |
 |Question | How can we use the `ENTRYPOINT` statement in our Dockerfile?  |
-| | The ENTRYPOINT, at the end of the Dockerfile, allows
- to parse arguments passed to container  |
+| | The ENTRYPOINT, at the end of the Dockerfile, allows to parse arguments passed to container  |
 |Question | After building our Docker image, how do we use it to **run containers**?  |
 | | With docker run [args]  |
 |Question | How do we get the list of all **running containers**?  |
