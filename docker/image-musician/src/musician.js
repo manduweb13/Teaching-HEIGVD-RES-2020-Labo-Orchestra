@@ -52,6 +52,7 @@ function Musician(instru) {
  * Some error handling wouln't hurt here...
  */
 var instrument = process.argv[2];
+console.log(instrument);
 
 /*
  * Let's create a new thermoter - the regular publication of measures will
