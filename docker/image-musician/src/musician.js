@@ -51,7 +51,7 @@ function Musician(instru) {
  * Let's get the thermometer properties from the command line attributes
  * Some error handling wouln't hurt here...
  */
-var instrument = process.argv[1];
+var instrument = process.argv[2];
 
 /*
  * Let's create a new thermoter - the regular publication of measures will
