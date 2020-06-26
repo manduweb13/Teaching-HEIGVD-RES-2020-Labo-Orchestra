@@ -13,6 +13,8 @@ var dgram = require('dgram');
  */
 var s = dgram.createSocket('udp4');
 
+var uuid= require('uuid');
+
 var listInstruments=new Map();
 listInstruments.set('piano', 'ti-ta-ti');
 listInstruments.set('trumpet', 'pouet');
@@ -29,7 +31,10 @@ function Musician(instru) {
 	Musician.prototype.update=function() {
 		var sound= listInstruments.get(instru);
 		console.log(sound);
-		var payload = JSON.stringify(sound);
+		
+		var msg={id,sound};
+		
+		var payload = JSON.stringify(msg);
 
 /*
 	   * Finally, let's encapsulate the payload in a UDP datagram, which we publish on
@@ -52,7 +57,7 @@ function Musician(instru) {
  * Some error handling wouln't hurt here...
  */
 var instrument = process.argv[2];
-console.log(instrument);
+var id=uuid.v4();
 
 /*
  * Let's create a new thermoter - the regular publication of measures will
