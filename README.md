@@ -106,13 +106,13 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 |Question | How can we represent the system in an **architecture diagram**, which gives information both about the Docker containers, the communication protocols and the commands? |
 | | *Insert your diagram here...* |
 |Question | Who is going to **send UDP datagrams** and **when**? |
-| | *Enter your response here...* |
+| | The musician, every second |
 |Question | Who is going to **listen for UDP datagrams** and what should happen when a datagram is received? |
 | | *Enter your response here...* |
 |Question | What **payload** should we put in the UDP datagrams? |
-| | *Enter your response here...* |
+| | The UUID of Musician and the sound of his instrument |
 |Question | What **data structures** do we need in the UDP sender and receiver? When will we update these data structures? When will we query these data structures? |
-| | *Enter your response here...* |
+| | The Musician sends a JSON object. |
 
 
 ## Task 2: implement a "musician" Node.js application
@@ -126,9 +126,9 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 |Question | What is the `npm install` command and what is the purpose of the `--save` flag?  |
 | | The npm install runs npm to fetch and install a new NodeJS package. The --save allows to choose the dependency folderin in which this package will appear |
 |Question | How can we use the `https://www.npmjs.com/` web site?  |
-| | By creatin an account.  |
+| | We can use it to look for available packages  |
 |Question | In JavaScript, how can we **generate a UUID** compliant with RFC4122? |
-| | *Enter your response here...*  |
+| | With the uuid module, proposing the uuid.v4() method  |
 |Question | In Node.js, how can we execute a function on a **periodic** basis? |
 | | With an update() function set to a time interval  |
 |Question | In Node.js, how can we **emit UDP datagrams**? |
