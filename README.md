@@ -122,11 +122,11 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 |Question | In a JavaScript program, if we have an object, how can we **serialize it in JSON**? |
 | | With an appropriate JSON method. For a String, we use JSON.stringify  |
 |Question | What is **npm**?  |
-| | *Enter your response here...*  |
+| | A NodeJS package manager  |
 |Question | What is the `npm install` command and what is the purpose of the `--save` flag?  |
-| | *Enter your response here...*  |
+| | The npm install runs npm to fetch and install a new NodeJS package. The --save allows to choose the dependency folderin in which this package will appear |
 |Question | How can we use the `https://www.npmjs.com/` web site?  |
-| | *Enter your response here...*  |
+| | By creatin an account.  |
 |Question | In JavaScript, how can we **generate a UUID** compliant with RFC4122? |
 | | *Enter your response here...*  |
 |Question | In Node.js, how can we execute a function on a **periodic** basis? |
