@@ -30,7 +30,6 @@ function Musician(instru) {
 
 	Musician.prototype.update=function() {
 		var sound= listInstruments.get(instru);
-		console.log(sound);
 		
 		var msg={id,sound};
 		
