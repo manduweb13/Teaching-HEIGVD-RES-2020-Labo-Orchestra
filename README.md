@@ -108,7 +108,7 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 |Question | Who is going to **send UDP datagrams** and **when**? |
 | | The musician, every second |
 |Question | Who is going to **listen for UDP datagrams** and what should happen when a datagram is received? |
-| | *Enter your response here...* |
+| |  |
 |Question | What **payload** should we put in the UDP datagrams? |
 | | The UUID of Musician and the sound of his instrument |
 |Question | What **data structures** do we need in the UDP sender and receiver? When will we update these data structures? When will we query these data structures? |
@@ -146,7 +146,7 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 |Question | How can we use the `ENTRYPOINT` statement in our Dockerfile?  |
 | | The ENTRYPOINT, at the end of the Dockerfile, allows to parse arguments passed to container  |
 |Question | After building our Docker image, how do we use it to **run containers**?  |
-| | With docker run [args]  |
+| | With docker run [args]. For Musician, the arg must be his instrument |
 |Question | How do we get the list of all **running containers**?  |
 | | With docker ps  |
 |Question | How do we **stop/kill** one running container?  |
