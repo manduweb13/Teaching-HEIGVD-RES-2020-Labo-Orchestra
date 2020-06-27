@@ -28,7 +28,8 @@ s.bind(protocol.PROTOCOL_PORT_LISTENING_FOR_MUSICIANS, function() {
 var musicians = new Map();
 //Retourne les musiciens actifs
 function getMusicians() {
-        return Object.fromEntries(musicians);
+        return JSON.stringify([...musicians]);
+	//return Object.fromEntries(musicians);
 }
 
 s.on('message', function(msg, source){
