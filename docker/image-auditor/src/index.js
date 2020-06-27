@@ -1,76 +1,59 @@
+var protocol = require('./orchestra-protocol');
 var dgram = require('dgram');
 var express = require('express');
 var app = express();
-var ORCHESTRA_MULTICAST_GROUP = '224.224.224.224';
-var ORCHESTRA_UDP_PORT = 50000;
-
+var moment = require('moment');
 app.get('/', function(req, res) {
-	res.format({
-		'application/json': function(){
-			console.log("Sending musicians to client");
-			res.send( getMusicians() );
-		}
-	})
+        res.format({
+                'application/json': function(){
+                        console.log("Sending musicians to client");
+                        res.send( getMusicians() );
+                }
+        })
 
 });
 
 app.listen(2205, function () {
-	console.log('Accepting HTTP requests on port 2205!');
+        console.log("Accepting HTTP requests on port ".concat(protocol.PROTOCOL_PORT_LISTENING_FOR_CLIENT));
 });
 
 //Ajout au groupe multicast pour communication avec les musiciens
-var udpSocket = dgram.createSocket('udp4', receivedMessage);
+var s = dgram.createSocket('udp4');
 
-udpSocket.bind(ORCHESTRA_UDP_PORT, function() {
-  console.log("Joining multicast group");
-  s.addMembership(ORCHESTRA_MULTICAST_GROUP);
+s.bind(protocol.PROTOCOL_PORT_LISTENING_FOR_MUSICIANS, function() {
+  console.log("Joining multicast group ".concat(protocol.PROTOCOL_MULTICAST_ADDRESS));
+  s.addMembership(protocol.PROTOCOL_MULTICAST_ADDRESS);
 });
 
-receivedMessage(){
-	//si uuid déjà dans tableau --> remettre activeSince à heure courante
-	//sinon addMusician
-}
-
-//ajoute un musicien
-function addMusician(uuid, instrument, activeSince){
-	var musician;
-}
-
-//supprime un musicien
-function removeMusician(uuid){
-
-}
-
+var musicians = new Map();
 //Retourne les musiciens actifs
 function getMusicians() {
-
-	var musicians = [];
-	
-
-	for(var i = 0; i < numberOfMembers; i++) {
-		var gender = chance.gender();
-		var firstName = chance.first({gender: gender});
-		var lastName = chance.last({gender: gender});
-		var birthDate = chance.date({string: true, american: false});
-
-		var presences = [];;
-		
-		for(var j = 0; j < numberOfPresences; j++) {
-			presences.push({
-				date: chance.date({string: true, american:false}),
-				eventLocation: chance.city()
-			});
-		}
-	
-		musicians.push({
-				firstName: firstName,
-				lastName: lastName,
-				gender: gender,
-				birthDate: birthDate,
-				presences: presences
-			});
-	}	
-	return musicians;
-
+        return Object.fromEntries(musicians);
 }
 
+s.on('message', function(msg, source){
+        console.log("datagramme received from a musician "
+        + msg + ". Source port: " + source.port);
+
+        const obj = JSON.parse(msg);
+
+        // Verifie si le uuid est deja dans la map
+        var alreadyRegisteredMusician = musicians.has(obj.id);
+
+
+                musicians.set(obj.id, moment());
+
+
+
+
+});
+
+function killDeadMusicians(){
+        musicians.forEach(function(value, key) {
+                if(moment.duration((moment().diff(value))).asSeconds() >= 5){
+                        musicians.delete(key);
+                        console.log("Musician is dead : " + key);
+                }
+        });
+}
+setInterval(killDeadMusicians, 5000);
