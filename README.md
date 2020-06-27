@@ -108,11 +108,11 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 |Question | Who is going to **send UDP datagrams** and **when**? |
 | | The musician, every second |
 |Question | Who is going to **listen for UDP datagrams** and what should happen when a datagram is received? |
-| |  |
+| | The auditor must listen to them. When it receives one, it must read the payload to add the musician in the array of musicians |
 |Question | What **payload** should we put in the UDP datagrams? |
 | | The UUID of Musician and the sound of his instrument |
 |Question | What **data structures** do we need in the UDP sender and receiver? When will we update these data structures? When will we query these data structures? |
-| | The Musician sends a JSON object. |
+| | The Musician sends a JSON object it is sent every second by the musician. The auditor manage a map of musician object that it will send under json format to the client. This is queried by an request sent by the client to the auditor|
 
 
 ## Task 2: implement a "musician" Node.js application
@@ -160,15 +160,33 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 | #  | Topic |
 | ---  | ---  |
 |Question | With Node.js, how can we listen for UDP datagrams in a multicast group? |
-| | *Enter your response here...*  |
+| var s = dgram.createSocket('udp4');
+
+s.bind(protocol.PROTOCOL_PORT_LISTENING_FOR_MUSICIANS, function() {
+  s.addMembership(protocol.PROTOCOL_MULTICAST_ADDRESS);
+});  |
 |Question | How can we use the `Map` built-in object introduced in ECMAScript 6 to implement a **dictionary**?  |
-| | *Enter your response here...* |
+| We use it by making each uuid a key for this map and the other fields the value.
+var musicians = new Map();
+using musicians.set(...) and musician.delete(...)|
 |Question | How can we use the `Moment.js` npm module to help us with **date manipulations** and formatting?  |
-| | *Enter your response here...* |
+| We can use the moment() function to store the hour when the musician is listened by the auditor, we can also use the duration() function and the diff function to check every five seconds if the musicians are still alive |
 |Question | When and how do we **get rid of inactive players**?  |
-| | *Enter your response here...* |
+| We must remove the inactive players as soon as they did not send the datagramme in the last five seconds. |
 |Question | How do I implement a **simple TCP server** in Node.js?  |
-| | *Enter your response here...* |
+| var app = express();
+  app.get('/', function(req, res) {
+        res.format({
+                'application/json': function(){
+                        console.log("Sending musicians to client");
+                        res.send( getMusicians() );
+                }
+        })
+
+});
+  app.listen(2205, function () {
+        console.log("Accepting HTTP requests on port ".concat(protocol.PROTOCOL_PORT_LISTENING_FOR_CLIENT));
+});|
 
 
 ## Task 5: package the "auditor" app in a Docker image
@@ -176,7 +194,11 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 | #  | Topic |
 | ---  | --- |
 |Question | How do we validate that the whole system works, once we have built our Docker image? |
-| | *Enter your response here...* |
+| We made it by :
+  * launching the auditor container with port mapping of 2205:2205
+  * We saw in the browser that we receive a [], we have no musician playing
+  * We launched multiple musician containers and we saw that the JSON array returned is full of musicians
+  * We killed some musicians and we saw after 5 seconds that they were removed|
 
 
 ## Constraints
