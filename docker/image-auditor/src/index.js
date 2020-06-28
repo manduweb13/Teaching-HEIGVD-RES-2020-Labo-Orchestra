@@ -57,4 +57,4 @@ function killDeadMusicians(){
                 }
         });
 }
-setInterval(killDeadMusicians, 5000);
+setInterval(killDeadMusicians, 1000);
