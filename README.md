@@ -104,7 +104,7 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 | #  | Topic |
 | --- | --- |
 |Question | How can we represent the system in an **architecture diagram**, which gives information both about the Docker containers, the communication protocols and the commands? |
-| | *Insert your diagram here...* |
+| | ![image](images/infra.png) ![image](images/messages.png)|
 |Question | Who is going to **send UDP datagrams** and **when**? |
 | | The musician, every second |
 |Question | Who is going to **listen for UDP datagrams** and what should happen when a datagram is received? |
@@ -160,21 +160,15 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 | #  | Topic |
 | ---  | ---  |
 |Question | With Node.js, how can we listen for UDP datagrams in a multicast group? |
-| var s = dgram.createSocket('udp4');
-
-s.bind(protocol.PROTOCOL_PORT_LISTENING_FOR_MUSICIANS, function() {
-  s.addMembership(protocol.PROTOCOL_MULTICAST_ADDRESS);
-});  |
+| | The listener must use dgram and its bind function to listen on a port, then it must use the addMembership function to connect to the musician multicast group |
 |Question | How can we use the `Map` built-in object introduced in ECMAScript 6 to implement a **dictionary**?  |
-| We use it by making each uuid a key for this map and the other fields the value.
-var musicians = new Map();
-using musicians.set(...) and musician.delete(...)|
+| |We use it by making each uuid a key for this map and the other fields the value.  We use musicians.set(...) and musician.delete(...) to add and remove musician|
 |Question | How can we use the `Moment.js` npm module to help us with **date manipulations** and formatting?  |
-| We can use the moment() function to store the hour when the musician is listened by the auditor, we can also use the duration() function and the diff function to check every five seconds if the musicians are still alive |
+| |We can use the moment() function to store the hour when the musician is listened by the auditor, we can also use the duration() function and the diff function to check every seconds if the musicians are still alive (if the last moment they sent a sound was more than 5 seconds ago)|
 |Question | When and how do we **get rid of inactive players**?  |
-| We must remove the inactive players as soon as they did not send the datagramme in the last five seconds. |
+| |We must remove the inactive players as soon as they did not send the datagramme in the last five seconds. |
 |Question | How do I implement a **simple TCP server** in Node.js?  |
-| var app = express();
+| |var app = express();
   app.get('/', function(req, res) {
         res.format({
                 'application/json': function(){
@@ -194,11 +188,7 @@ using musicians.set(...) and musician.delete(...)|
 | #  | Topic |
 | ---  | --- |
 |Question | How do we validate that the whole system works, once we have built our Docker image? |
-| We made it by :
-  * launching the auditor container with port mapping of 2205:2205
-  * We saw in the browser that we receive a [], we have no musician playing
-  * We launched multiple musician containers and we saw that the JSON array returned is full of musicians
-  * We killed some musicians and we saw after 5 seconds that they were removed|
+| | We firstly launch the auditor container with port mapping of 2205:2205 then we see in the browser that we receive a [], we have no musician playing. Then we launch multiple musician containers and we se that the JSON array returned is full of musicians. We then kill some musicians and we saw after 5 seconds that they were removed (They are not in the JSON received anymore). We also can see the logs that are written live by the auditor container if we dont use the -d option for background mode|
 
 
 ## Constraints
