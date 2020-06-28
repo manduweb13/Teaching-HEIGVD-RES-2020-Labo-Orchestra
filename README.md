@@ -168,19 +168,7 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 |Question | When and how do we **get rid of inactive players**?  |
 | |We must remove the inactive players as soon as they did not send the datagramme in the last five seconds. |
 |Question | How do I implement a **simple TCP server** in Node.js?  |
-| |var app = express();
-  app.get('/', function(req, res) {
-        res.format({
-                'application/json': function(){
-                        console.log("Sending musicians to client");
-                        res.send( getMusicians() );
-                }
-        })
-
-});
-  app.listen(2205, function () {
-        console.log("Accepting HTTP requests on port ".concat(protocol.PROTOCOL_PORT_LISTENING_FOR_CLIENT));
-});|
+| | We implement it with net module of nodeJS. It must listen to a port (2205) and when connection is requested (tcpsrv.on('connection')) it must write in the socket|
 
 
 ## Task 5: package the "auditor" app in a Docker image
@@ -188,7 +176,7 @@ When you connect to the TCP interface of the **Auditor**, you should receive an 
 | #  | Topic |
 | ---  | --- |
 |Question | How do we validate that the whole system works, once we have built our Docker image? |
-| | We firstly launch the auditor container with port mapping of 2205:2205 then we see in the browser that we receive a [], we have no musician playing. Then we launch multiple musician containers and we se that the JSON array returned is full of musicians. We then kill some musicians and we saw after 5 seconds that they were removed (They are not in the JSON received anymore). We also can see the logs that are written live by the auditor container if we dont use the -d option for background mode|
+| | We firstly launch the auditor container with port mapping of 2205:2205 then launch telnet 192.168.88.100 2205 and we receive a [], we have no musician playing. Then we launch multiple musician containers and we see that the JSON array returned is full of musicians. We then kill some musicians and we saw after 5 seconds that they were removed (They are not in the JSON received anymore). We also can see the logs that are written live by the auditor container if we dont use the -d option for background mode.|
 
 
 ## Constraints
