@@ -54,10 +54,10 @@ s.on('message', function(msg, source){
 
 function killDeadMusicians(){
         musicians.forEach(function(value, key) {
-                if(moment.duration((moment().diff(value))).asSeconds() >= 5){
+                if(moment().diff(moment(value.activeSince)) >= 5000){
                         musicians.delete(key);
                         console.log("Musician is dead : " + key);
                 }
         });
 }
-setInterval(killDeadMusicians, 5000);
+setInterval(killDeadMusicians, 1000);
