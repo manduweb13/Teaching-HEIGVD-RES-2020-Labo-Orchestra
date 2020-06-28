@@ -1,20 +1,24 @@
 var protocol = require('./orchestra-protocol');
 var dgram = require('dgram');
-var express = require('express');
-var app = express();
 var moment = require('moment');
-app.get('/', function(req, res) {
-        res.format({
-                'application/json': function(){
-                        console.log("Sending musicians to client");
-                        res.send( getMusicians() );
-                }
-        })
 
-});
+var net = require('net');
 
-app.listen(2205, function () {
-        console.log("Accepting HTTP requests on port ".concat(protocol.PROTOCOL_PORT_LISTENING_FOR_CLIENT));
+var tcpsrv = net.createServer();
+
+var listSounds=new Map();
+listSounds.set('ti-ta-ti', 'piano');
+listSounds.set('pouet', 'trumpet');
+listSounds.set('trulu', 'flute');
+listSounds.set('gzi-gzi', 'violin');
+listSounds.set('boum-boum', 'drum');
+
+tcpsrv.listen(protocol.PROTOCOL_PORT_LISTENING_FOR_CLIENT);
+console.log("Accepting HTTP requests on port ".concat(protocol.PROTOCOL_PORT_LISTENING_FOR_CLIENT));
+
+tcpsrv.on('connection', function(socket){
+	socket.write( getMusicians() );
+	socket.end();
 });
 
 //Ajout au groupe multicast pour communication avec les musiciens
@@ -28,8 +32,14 @@ s.bind(protocol.PROTOCOL_PORT_LISTENING_FOR_MUSICIANS, function() {
 var musicians = new Map();
 //Retourne les musiciens actifs
 function getMusicians() {
-        return JSON.stringify([...musicians]);
-	//return Object.fromEntries(musicians);
+
+	var array = [];
+
+	musicians.forEach(function(value,key){
+		array.push({ uuid: key, instrument: value.instrument, activeSince: value.activeSince});
+	});
+
+	return JSON.stringify(array);
 }
 
 s.on('message', function(msg, source){
@@ -38,14 +48,7 @@ s.on('message', function(msg, source){
 
         const obj = JSON.parse(msg);
 
-        // Verifie si le uuid est deja dans la map
-        var alreadyRegisteredMusician = musicians.has(obj.id);
-
-
-                musicians.set(obj.id, moment());
-
-
-
+        musicians.set(obj.id, {"instrument": listSounds.get(obj.sound), "activeSince" : moment()});
 
 });
 
@@ -57,4 +60,4 @@ function killDeadMusicians(){
                 }
         });
 }
-setInterval(killDeadMusicians, 1000);
+setInterval(killDeadMusicians, 5000);
